@@ -1,0 +1,25 @@
+name: Cargar datos históricos a Supabase
+
+on:
+  workflow_dispatch:
+
+jobs:
+  cargar_datos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clonar repo
+        uses: actions/checkout@v3
+
+      - name: Instalar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Instalar dependencias para carga histórica
+        run: pip install -r requirements_historico.txt
+
+      - name: Ejecutar carga histórica
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+        run: python subir_datos_historicos.py

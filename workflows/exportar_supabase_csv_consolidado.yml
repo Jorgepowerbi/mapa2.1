@@ -1,0 +1,30 @@
+name: Exportar consolidado a CSV
+
+on:
+  schedule:
+    - cron: '0 12 25 * *'  # Día 25 de cada mes a las 12:00 UTC
+  workflow_dispatch:
+
+jobs:
+  exportar:
+    runs-on: ubuntu-latest
+
+    env:
+      SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+      SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: pip install -r requirements_exportar_consolidado.txt
+
+      - name: Ejecutar exportación
+        run: python exportar_consolidado.py
+
